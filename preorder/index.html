@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Preorder Prism</title>
+<meta name="description" content="Reserve a Prism. $250 anticipated, preorders open mid October 2026, nothing charged today.">
+<meta name="theme-color" content="#ffffff">
+<link rel="canonical" href="https://meetprism.co/preorder/">
+<link rel="icon" href="../assets/favicon.png">
+<meta name="robots" content="noindex">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --bg:#fff;--tile:#f5f5f7;--fg:#1d1d1f;--dim:#6e6e73;--line:rgba(0,0,0,.1);
+    --prism:linear-gradient(90deg,#FF3B30,#FF9500,#FFD60A,#34C759,#0A84FF,#AF52DE);
+    --ease:cubic-bezier(.22,1,.36,1);--gutter:clamp(22px,5vw,72px);--nav:52px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{
+    background:var(--bg);color:var(--fg);
+    font-family:Inter,-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Helvetica,Arial,sans-serif;
+    line-height:1.5;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
+  }
+  html{scrollbar-color:rgba(0,0,0,.28) #fff;scrollbar-width:thin}
+  ::-webkit-scrollbar{width:10px}
+  ::-webkit-scrollbar-track{background:#fff}
+  ::-webkit-scrollbar-thumb{background:rgba(0,0,0,.22);border-radius:10px;border:3px solid #fff;background-clip:content-box}
+
+  header{
+    position:fixed;top:0;left:0;right:0;z-index:90;height:var(--nav);
+    display:flex;align-items:center;justify-content:space-between;padding:0 var(--gutter);
+    background:rgba(255,255,255,.72);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);
+    border-bottom:1px solid var(--line);
+  }
+  .wordmark{display:flex;align-items:center;gap:9px;font-size:15px;font-weight:600;letter-spacing:-.01em;color:var(--fg);text-decoration:none}
+  .wordmark img{height:18px;width:auto;display:block}
+  header a.back{font-size:13px;color:var(--dim);text-decoration:none}
+  header a.back:hover{color:var(--fg)}
+
+  main{padding:calc(var(--nav) + clamp(56px,9vh,96px)) var(--gutter) clamp(96px,14vh,160px)}
+  .wrap{max-width:560px;margin:0 auto}
+  h1{font-size:clamp(2.2rem,5vw,3.6rem);font-weight:600;letter-spacing:-.035em;line-height:1.04;text-wrap:balance}
+  .lede{color:var(--dim);font-size:clamp(1rem,1.35vw,1.15rem);line-height:1.5;margin-top:16px;text-wrap:pretty}
+  .rule{width:120px;height:2px;background:var(--prism);border-radius:2px;margin:28px 0 36px}
+
+  form{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .field{display:flex;flex-direction:column;gap:7px}
+  .field.full{grid-column:1 / -1}
+  label{font-size:13px;font-weight:600;letter-spacing:-.01em}
+  label small{font-weight:400;color:var(--dim);margin-left:6px}
+  input,textarea{
+    font:inherit;font-size:15px;color:var(--fg);
+    background:var(--tile);border:1px solid transparent;border-radius:12px;
+    padding:13px 14px;width:100%;outline:none;
+    transition:border-color .25s var(--ease),background .25s var(--ease);
+  }
+  textarea{min-height:110px;resize:vertical}
+  input:focus,textarea:focus{background:#fff;border-color:#0A84FF;box-shadow:0 0 0 4px rgba(10,132,255,.15)}
+  input::placeholder,textarea::placeholder{color:#a1a1a6}
+  .btn{
+    grid-column:1 / -1;margin-top:8px;
+    display:inline-flex;align-items:center;justify-content:center;
+    padding:15px 26px;border-radius:999px;border:0;cursor:pointer;
+    background:var(--fg);color:#fff;font:inherit;font-size:15px;font-weight:600;
+    transition:transform .35s var(--ease),box-shadow .35s var(--ease),opacity .2s;
+  }
+  .btn:hover{transform:translateY(-2px);box-shadow:0 14px 36px -10px rgba(0,0,0,.4)}
+  .btn:disabled{opacity:.6;cursor:default;transform:none;box-shadow:none}
+  .fine{grid-column:1 / -1;font-size:13px;color:var(--dim);line-height:1.5;text-wrap:pretty}
+
+  .done{display:none;padding:36px 0 0}
+  .done h2{font-size:clamp(1.6rem,3.4vw,2.4rem);font-weight:600;letter-spacing:-.03em;line-height:1.1}
+  .done p{color:var(--dim);margin-top:12px;max-width:44ch;text-wrap:pretty}
+  .done a{display:inline-block;margin-top:24px;color:var(--fg);font-weight:600;text-decoration:none}
+  body.sent form{display:none}
+  body.sent .done{display:block}
+
+  footer{padding:36px var(--gutter);border-top:1px solid var(--line);color:#a1a1a6;font-size:13px}
+
+  @media (max-width:560px){
+    form{grid-template-columns:1fr}
+    .field.full{grid-column:auto}
+    .btn,.fine{grid-column:auto}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <a class="wordmark" href="../"><img src="../assets/prism-mark.svg" alt="" width="22" height="18">Prism</a>
+  <a class="back" href="../">Back</a>
+</header>
+
+<main>
+  <div class="wrap">
+    <h1>Preorder Prism.</h1>
+    <p class="lede">Reserve yours now. Nothing is charged today. Preorders open mid October 2026 at an anticipated $250, and you get a 10% code by email for being early.</p>
+    <div class="rule"></div>
+
+    <!-- Posts straight to the Google Form behind this page. Field names are the form's entry IDs. -->
+    <form id="pf" action="https://docs.google.com/forms/d/e/1FAIpQLSe4lLL-CqOzVJiMoZOly79QmzBDQlLK2WsYZfU3JHllmBythQ/formResponse" method="POST" target="gf" autocomplete="on">
+      <div class="field"><label for="fn">First name</label><input id="fn" name="entry.215461340" type="text" autocomplete="given-name" required></div>
+      <div class="field"><label for="ln">Last name</label><input id="ln" name="entry.171787544" type="text" autocomplete="family-name" required></div>
+      <div class="field full"><label for="em">Email</label><input id="em" name="entry.34297906" type="email" autocomplete="email" inputmode="email" required></div>
+      <div class="field full"><label for="ph">Phone</label><input id="ph" name="entry.604296952" type="tel" autocomplete="tel" inputmode="tel" required></div>
+      <div class="field full"><label for="co">Country</label><input id="co" name="entry.407097460" type="text" autocomplete="country-name" placeholder="Where should we ship it?" required></div>
+      <div class="field full"><label for="us">What will you put under it?<small>optional</small></label><textarea id="us" name="entry.589423527" placeholder="Homework, a piano, a chessboard, a workbench…"></textarea></div>
+      <input type="hidden" name="fvv" value="1"><input type="hidden" name="pageHistory" value="0">
+      <button class="btn" id="submit" type="submit">Preorder for $250</button>
+      <p class="fine">No payment is taken on this page. We'll email you when preorders open.</p>
+    </form>
+
+    <div class="done" id="done">
+      <h2>You're on the list.</h2>
+      <p>Watch your inbox for the code, and for the day preorders open.</p>
+      <a href="../">Back to Prism</a>
+    </div>
+  </div>
+</main>
+
+<iframe name="gf" id="gf" hidden title="submission"></iframe>
+
+<footer>&copy; 2026 Firley</footer>
+
+<script>
+(function(){
+  var form = document.getElementById('pf'), gf = document.getElementById('gf'),
+      btn = document.getElementById('submit'), sent = false;
+  form.addEventListener('submit', function(){
+    sent = true; btn.disabled = true; btn.textContent = 'Sending…';
+  });
+  /* Google answers into the hidden frame; when it loads after a submit, we're done */
+  gf.addEventListener('load', function(){
+    if(!sent) return;
+    document.body.classList.add('sent');
+    window.scrollTo({top:0, behavior:'smooth'});
+  });
+})();
+</script>
+</body>
+</html>
