@@ -599,14 +599,16 @@
     frame.classList.remove('needs-tap'); film.play().catch(function(){});
   });
 
-  if('IntersectionObserver' in window){
-    new IntersectionObserver(function(entries){
-      entries.forEach(function(e){
-        if(e.isIntersecting){ if(wantsPlay) tryPlay(); }
-        else film.pause();
-      });
-    }, {rootMargin:'200px 0px', threshold:0.2}).observe(film);
-  } else if(wantsPlay){ tryPlay(); }
+  /* the film autoplays from its own attribute; this only nudges browsers that ignored it,
+     and never pauses it, so a missed visibility event cannot leave it stuck */
+  if(wantsPlay){
+    tryPlay();
+    if('IntersectionObserver' in window){
+      new IntersectionObserver(function(entries){
+        entries.forEach(function(e){ if(e.isIntersecting && film.paused) tryPlay(); });
+      }, {rootMargin:'200px 0px', threshold:0.1}).observe(film);
+    }
+  }
 })();
 </script>
 </body>
