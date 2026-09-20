@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Prism by Firley. Intelligence, on the table.</title>
+<meta name="description" content="Prism is a lamp that turns your desk into a screen you can touch, and sees the notebook, book or piano under it. Augmented reality for your desk. Nothing to wear.">
+<meta name="theme-color" content="#ffffff">
+<link rel="canonical" href="https://meetprism.co/">
+<link rel="icon" href="assets/favicon.png">
+
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://meetprism.co/">
+<meta property="og:title" content="Prism by Firley. Intelligence, on the table.">
+<meta property="og:description" content="A lamp that turns your desk into a screen you can touch, and sees what's under it.">
+<meta property="og:image" content="https://meetprism.co/assets/lineup.webp">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;1,600;1,700&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --bg:#fff;
+    --tile:#f5f5f7;
+    --fg:#1d1d1f;
+    --dim:#6e6e73;
+    --line:rgba(0,0,0,.08);
+    --red:#FF3B30;--orange:#FF9500;--yellow:#FFD60A;--green:#34C759;--blue:#0A84FF;--violet:#AF52DE;
+    --prism:linear-gradient(90deg,var(--red),var(--orange),var(--yellow),var(--green),var(--blue),var(--violet));
+    --ease:cubic-bezier(.22,1,.36,1);
+    --gutter:clamp(22px,5vw,72px);
+    --radius:clamp(18px,2.2vw,28px);
+    --nav:52px;
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+
+  body{
+    background:var(--bg);color:var(--fg);
+    font-family:Inter,-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Helvetica,Arial,sans-serif;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
+    overflow-x:hidden;
+  }
+
+  /* ---- scrollbar ---- */
+  html{scrollbar-color:rgba(0,0,0,.28) #fff;scrollbar-width:thin}
+  ::-webkit-scrollbar{width:10px;height:10px}
+  ::-webkit-scrollbar-track{background:#fff}
+  ::-webkit-scrollbar-thumb{background:rgba(0,0,0,.22);border-radius:10px;border:3px solid #fff;background-clip:content-box}
+  ::-webkit-scrollbar-thumb:hover{background:rgba(0,0,0,.42);background-clip:content-box}
+  ::selection{background:rgba(10,132,255,.18)}
+
+  #progress{
+    position:fixed;top:0;left:0;height:2px;width:100%;
+    background:var(--prism);transform:scaleX(0);transform-origin:0 50%;
+    z-index:100;pointer-events:none;
+  }
+
+  /* ---- nav ---- */
+  header{
+    position:fixed;top:0;left:0;right:0;z-index:90;height:var(--nav);
+    display:flex;align-items:center;justify-content:space-between;
+    padding:0 var(--gutter);
+    background:rgba(255,255,255,.72);
+    backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);
+    border-bottom:1px solid transparent;transition:border-color .4s var(--ease);
+  }
+  header.solid{border-bottom-color:var(--line)}
+  .wordmark{display:flex;align-items:center;gap:9px;font-size:15px;font-weight:600;letter-spacing:-.01em;color:var(--fg);text-decoration:none}
+  .wordmark img{height:18px;width:auto;display:block}
+  nav.links{display:flex;gap:28px;position:absolute;left:50%;transform:translateX(-50%)}
+  nav.links a{font-size:13px;color:var(--dim);text-decoration:none;transition:color .3s var(--ease)}
+  nav.links a:hover{color:var(--fg)}
+  .nav-btn{font-size:12px;font-weight:500;color:#fff;text-decoration:none;background:var(--fg);padding:7px 14px;border-radius:999px;transition:opacity .3s var(--ease)}
+  .nav-btn:hover{opacity:.8}
+
+  /* ---- type ---- */
+  h1{font-size:clamp(2.4rem,5.6vw,4.6rem);font-weight:600;letter-spacing:-.035em;line-height:1.04;text-wrap:balance}
+  h2{font-size:clamp(1.9rem,4.2vw,3.4rem);font-weight:600;letter-spacing:-.03em;line-height:1.06;text-wrap:balance}
+  h2 em,h1 em{font-style:italic;font-weight:700}
+  h3{font-size:clamp(1.15rem,1.6vw,1.35rem);font-weight:600;letter-spacing:-.02em;line-height:1.25}
+  .lede{color:var(--dim);text-wrap:pretty;font-size:clamp(1rem,1.35vw,1.2rem);line-height:1.5}
+  .btn{
+    display:inline-flex;align-items:center;padding:13px 26px;border-radius:999px;
+    background:var(--fg);color:#fff;font-size:14px;font-weight:600;text-decoration:none;
+    transition:transform .35s var(--ease),box-shadow .35s var(--ease);
+  }
+  .btn:hover{transform:translateY(-2px);box-shadow:0 14px 36px -10px rgba(0,0,0,.4)}
+
+  section{padding:clamp(88px,12vh,150px) var(--gutter)}
+  .wrap{max-width:1180px;margin:0 auto}
+  .head{text-align:center;max-width:760px;margin:0 auto}
+  .head .lede{margin:16px auto 0;max-width:46ch}
+  .head .btn{margin-top:28px}
+  .band{background:var(--tile)}
+
+  /* ---- hero: two sentences, a subline, the product ---- */
+  .hero{padding:calc(var(--nav) + clamp(64px,10vh,112px)) var(--gutter) 0;text-align:center}
+  .hero h1{max-width:26ch;margin:0 auto}
+  .hero h1 .w{display:inline-block;opacity:0;transform:translateY(.35em);animation:word .9s var(--ease) forwards;animation-delay:calc(var(--i) * 55ms)}
+  @keyframes word{to{opacity:1;transform:none}}
+  .hero .lede{margin:22px auto 0;max-width:52ch;opacity:0;animation:word 1s var(--ease) .7s forwards}
+  .hero .stage{position:relative;max-width:1240px;margin:clamp(28px,4vh,48px) auto 0;aspect-ratio:2000/1116}
+  .stage img{
+    width:100%;height:100%;object-fit:cover;display:block;
+    /* the arms dissolve into the page over the bottom third, so the image has no bottom edge */
+    -webkit-mask-image:linear-gradient(to right,transparent,#000 12%,#000 88%,transparent),linear-gradient(to bottom,transparent,#000 6%,#000 62%,transparent 100%);
+    -webkit-mask-composite:source-in;
+    mask-image:linear-gradient(to right,transparent,#000 12%,#000 88%,transparent),linear-gradient(to bottom,transparent,#000 6%,#000 62%,transparent 100%);
+    mask-composite:intersect;
+    opacity:0;animation:settle 1.4s var(--ease) .35s forwards;
+  }
+  @keyframes settle{from{opacity:0;transform:translateY(18px) scale(1.02)}to{opacity:1;transform:none}}
+
+  /* ---- film ---- */
+  .film{padding-top:clamp(200px,32vh,360px)}
+  .frame{
+    position:relative;border-radius:var(--radius);overflow:hidden;background:#000;line-height:0;
+    box-shadow:0 30px 80px -30px rgba(0,0,0,.35);
+    /* never taller than ~three quarters of the viewport, so the whole film sits in view */
+    width:min(100%,calc(74svh * 16 / 9));margin-inline:auto;
+  }
+  .frame video{width:100%;height:auto;display:block;aspect-ratio:16/9}
+  .sound-btn{
+    position:absolute;right:18px;bottom:18px;z-index:2;display:inline-flex;align-items:center;gap:8px;
+    padding:9px 15px;border-radius:999px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);
+    backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+    color:#fff;font-size:13px;font-weight:500;font-family:inherit;cursor:pointer;white-space:nowrap;
+    transition:background .3s var(--ease);
+  }
+  .sound-btn:hover{background:rgba(255,255,255,.26)}
+  .sound-btn svg{width:15px;height:15px;flex:none}
+
+  /* ---- roles: five things it is, each a render with the words on it ---- */
+  .roles{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-top:clamp(36px,5vh,56px)}
+  .role{
+    position:relative;aspect-ratio:4/5;border-radius:22px;overflow:hidden;background:var(--tile);
+    display:flex;flex-direction:column;justify-content:flex-end;padding:20px 18px;color:#fff;
+  }
+  .role img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;transition:transform .8s var(--ease)}
+  .role:hover img{transform:scale(1.04)}
+  .role::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.62),rgba(0,0,0,.18) 45%,transparent 70%)}
+  .role h3,.role p{position:relative;z-index:1;text-shadow:0 1px 12px rgba(0,0,0,.35)}
+  .role h3{font-size:1.05rem;margin-bottom:5px}
+  .role p{font-size:13.5px;line-height:1.4;color:rgba(255,255,255,.85);text-wrap:pretty}
+
+  /* ---- principles ---- */
+  .principles{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:clamp(36px,5vh,56px)}
+  .principle{background:#fff;border:1px solid var(--line);border-radius:20px;padding:26px 24px}
+  .principle i{display:block;width:34px;height:3px;border-radius:2px;background:var(--prism);margin-bottom:18px}
+  .principle p{font-size:15px;color:var(--fg);line-height:1.45;text-wrap:pretty}
+
+
+  /* ---- gallery: a rail of large cards, one app each ---- */
+  /* heading and rail share one inset, so the first card lines up under the headline */
+  #gallery{--inset:max(var(--gutter),calc((100% - 1180px) / 2))}
+  .rail-head{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;padding:0 var(--inset)}
+  .rail-head .head{text-align:left;margin:0}
+  .rail-head .head .lede{margin-left:0}
+  .paddles{display:flex;gap:10px;flex:none;padding-bottom:6px}
+  .paddles button{
+    width:40px;height:40px;border-radius:50%;border:0;cursor:pointer;
+    background:#fff;color:var(--fg);display:grid;place-items:center;
+    box-shadow:0 2px 10px -2px rgba(0,0,0,.18);transition:opacity .3s var(--ease),transform .3s var(--ease);
+  }
+  .paddles button:hover{transform:translateY(-1px)}
+  .paddles button:disabled{opacity:.3;cursor:default;transform:none}
+  .paddles svg{width:16px;height:16px}
+  .rail{
+    display:flex;gap:18px;overflow-x:auto;scroll-snap-type:x mandatory;
+    padding:clamp(32px,5vh,48px) var(--inset) 8px;
+    scroll-padding-left:var(--inset);scroll-padding-right:var(--inset);
+    scrollbar-width:none;-ms-overflow-style:none;
+  }
+  .rail::-webkit-scrollbar{display:none}
+  .card{flex:none;width:min(440px,78vw);scroll-snap-align:start;cursor:pointer;background:none;border:0;padding:0;font:inherit;text-align:left;color:var(--fg)}
+  .card .media{position:relative;aspect-ratio:4/3;border-radius:22px;overflow:hidden;background:#111;transition:transform .45s var(--ease)}
+  .card:hover .media{transform:translateY(-4px)}
+  .card img,.card video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+  .card video{opacity:0;transition:opacity .35s var(--ease)}
+  .card.playing video{opacity:1}
+  .card .play{
+    position:absolute;right:14px;bottom:14px;width:36px;height:36px;border-radius:50%;
+    background:rgba(255,255,255,.9);color:#000;display:grid;place-items:center;
+    box-shadow:0 4px 14px -4px rgba(0,0,0,.4);
+  }
+  .card .play svg{width:14px;height:14px;margin-left:2px}
+  .card h3{margin:16px 0 4px;font-size:1.1rem}
+  .card p{font-size:14.5px;color:var(--dim);line-height:1.45;text-wrap:pretty}
+
+  .lightbox{position:fixed;inset:0;z-index:200;display:none;align-items:center;justify-content:center;padding:24px}
+  .lightbox.open{display:flex}
+  .lightbox .veil{position:absolute;inset:0;background:rgba(0,0,0,.82);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+  .lightbox .panel{position:relative;width:min(1100px,100%);aspect-ratio:16/9;border-radius:var(--radius);overflow:hidden;background:#000;box-shadow:0 40px 120px -30px rgba(0,0,0,.8)}
+  .lightbox iframe{width:100%;height:100%;border:0;display:block}
+  .lightbox .x{
+    position:absolute;top:18px;right:18px;z-index:2;width:40px;height:40px;border-radius:50%;
+    background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);color:#fff;cursor:pointer;
+    display:grid;place-items:center;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  }
+  .lightbox .x svg{width:16px;height:16px}
+
+  /* ---- colors ---- */
+  /* the bouquet is a cutout with alpha, so it needs no mask and sits on any background */
+  .colors .stage{max-width:1100px;margin:clamp(28px,4vh,48px) auto 0;aspect-ratio:1702/1043}
+  .colors .stage img{
+    object-fit:contain;
+    /* the arms dissolve before the render's crop line, so there is no hard bottom edge */
+    -webkit-mask-image:linear-gradient(to bottom,#000 66%,transparent 100%);
+    mask-image:linear-gradient(to bottom,#000 66%,transparent 100%);
+  }
+  .swatches{display:flex;justify-content:center;gap:12px;margin-top:22px}
+  .swatches i{width:16px;height:16px;border-radius:50%;display:block}
+
+  /* ---- faq ---- */
+  .faq{max-width:760px;margin:clamp(32px,5vh,48px) auto 0;border-top:1px solid var(--line)}
+  .faq details{border-bottom:1px solid var(--line)}
+  .faq summary{
+    list-style:none;cursor:pointer;padding:20px 40px 20px 0;position:relative;
+    font-size:clamp(1rem,1.3vw,1.15rem);font-weight:600;letter-spacing:-.01em;
+  }
+  .faq summary::-webkit-details-marker{display:none}
+  .faq summary::after{
+    content:"+";position:absolute;right:4px;top:50%;transform:translateY(-50%);
+    font-weight:400;font-size:22px;color:var(--dim);transition:transform .3s var(--ease);
+  }
+  .faq details[open] summary::after{transform:translateY(-50%) rotate(45deg)}
+  .faq details p{padding:0 0 22px;color:var(--dim);font-size:15.5px;line-height:1.55;max-width:60ch;text-wrap:pretty}
+
+  /* ---- closing ---- */
+  .close{text-align:center}
+  .close .rule{width:min(200px,40%);height:2px;margin:0 auto clamp(36px,5vh,56px);background:var(--prism);border-radius:2px}
+  .close .addr{display:block;margin-top:20px;color:#a1a1a6;font-size:13px}
+
+  footer{padding:36px var(--gutter);border-top:1px solid var(--line);display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;color:#a1a1a6;font-size:13px}
+
+  /* ---- reveal ---- */
+  .reveal{opacity:0;transform:translateY(20px);transition:opacity .9s var(--ease),transform .9s var(--ease)}
+  .reveal.in{opacity:1;transform:none}
+  .d1{transition-delay:.08s}.d2{transition-delay:.16s}
+
+  @media (max-width:1100px){
+    .roles{grid-template-columns:repeat(3,1fr)}
+  }
+  @media (max-width:900px){
+    nav.links{display:none}
+    .principles{grid-template-columns:1fr 1fr}
+  }
+  @media (max-width:640px){
+    .principles{grid-template-columns:1fr}
+    /* phones: the roles become a swipeable row */
+    .roles{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;margin-inline:calc(-1 * var(--gutter));padding:0 var(--gutter);scroll-padding:0 var(--gutter)}
+    .roles::-webkit-scrollbar{display:none}
+    .role{flex:none;width:68vw;scroll-snap-align:start}
+    .paddles{display:none}
+    .hero .stage{margin-left:calc(-1 * var(--gutter) + 8px);margin-right:calc(-1 * var(--gutter) + 8px)}
+    footer{flex-direction:column}
+  }
+  @media (prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    .reveal{opacity:1;transform:none;transition:none}
+    .hero h1 .w,.hero .lede,.stage img{animation:none;opacity:1;transform:none}
+    .btn:hover{transform:none}
+  }
+</style>
+</head>
+
+<body>
+<div id="progress"></div>
+
+<header id="hdr">
+  <a class="wordmark" href="#top"><img src="assets/prism-mark.svg" alt="" width="22" height="18">Prism</a>
+  <nav class="links">
+    <a href="#what-it-does">What it does</a>
+    <a href="#made-for-you">Made for you</a>
+    <a href="#gallery">Gallery</a>
+    <a href="#colors">Colors</a>
+  </nav>
+  <a class="nav-btn" href="#access">Request early access</a>
+</header>
+
+<main id="top">
+
+  <!-- ═══ HERO ═══ -->
+  <section class="hero">
+    <h1 id="h1"><span class="line">Intelligence, on the table.</span><br><span class="line">Made for the work in front of you.</span></h1>
+    <p class="lede">Prism is a lamp that turns your desk into a screen you can touch, and sees the notebook, book or piano under it.</p>
+    <div class="stage">
+      <img src="assets/lineup.webp" alt="Five Prism lamps in red, orange, yellow, green and blue, in a row, each facing forward" width="2000" height="1116" fetchpriority="high">
+    </div>
+  </section>
+
+  <!-- ═══ FILM ═══ -->
+  <section class="film" id="what-it-does">
+    <div class="wrap">
+      <div class="frame reveal">
+        <video id="film" poster="assets/hero.jpg" muted loop playsinline preload="metadata" aria-label="Prism projecting an interactive interface onto a desk"></video>
+        <button class="sound-btn" id="sound-btn" aria-pressed="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path id="wave" d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"/></svg>
+          <span id="sound-label">Sound on</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ ROLES ═══ -->
+  <section id="made-for-you">
+    <div class="wrap">
+      <div class="head">
+        <h2 class="reveal">Made for whatever’s on the <em>desk</em>.</h2>
+        <p class="lede reveal d1">No two desks are the same. Prism works with what’s on yours.</p>
+      </div>
+      <div class="roles">
+        <div class="role reveal"><img src="assets/role-tutor.webp" alt="" width="2000" height="2000" loading="lazy"><h3>The tutor</h3><p>Reads your handwriting and checks each step.</p></div>
+        <div class="role reveal"><img src="assets/role-piano.webp" alt="" width="2000" height="2000" loading="lazy"><h3>The piano teacher</h3><p>Lights the next chord. Waits until you play it.</p></div>
+        <div class="role reveal"><img src="assets/role-reading.webp" alt="" width="2000" height="2000" loading="lazy"><h3>The reading partner</h3><p>Ask about the paragraph under your finger.</p></div>
+        <div class="role reveal"><img src="assets/role-flashcards.webp" alt="" width="2000" height="2000" loading="lazy"><h3>The flashcard maker</h3><p>Turns today’s notes into tomorrow’s review.</p></div>
+        <div class="role reveal"><img src="assets/role-chess.webp" alt="" width="2000" height="2000" loading="lazy"><h3>The chess board</h3><p>A full board with no pieces to lose. It plays back.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ PRINCIPLES ═══ -->
+  <section>
+    <div class="wrap">
+      <div class="head">
+        <h2 class="reveal">Just <em>point</em>.</h2>
+        <p class="lede reveal d1">Talk to it like a tutor sitting next to you. Nothing to learn, nothing to set up.</p>
+      </div>
+      <div class="principles">
+        <div class="principle reveal"><i></i><p>It sees what's on the desk, not what's on a screen. Paper, books, keys, your hands.</p></div>
+        <div class="principle reveal d1"><i></i><p>It answers where you're looking. On the page, on the keys, on the board. Not in a chat window.</p></div>
+        <div class="principle reveal d2"><i></i><p>Touch the desk like a screen. Pinch, drag, write, tap. Everything you already know how to do.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ GALLERY ═══ -->
+  <section class="band" id="gallery" style="padding-left:0;padding-right:0">
+    <div class="rail-head">
+      <div class="head">
+        <h2 class="reveal">Ten apps. One <em>lamp</em>.</h2>
+        <p class="lede reveal d1">From the prototype. Click any one for the film.</p>
+      </div>
+      <div class="paddles reveal d1" aria-hidden="true">
+        <button type="button" id="rail-prev" aria-label="Previous"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button>
+        <button type="button" id="rail-next" aria-label="Next"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
+      </div>
+    </div>
+    <div class="rail" id="rail">
+      <button class="card reveal" data-yt="dS0Vy89RNks" data-src="assets/gallery/home.mp4" aria-label="Play Home">
+        <div class="media"><img src="assets/gallery/home.webp" alt="" width="720" height="540" loading="lazy"><video muted loop playsinline preload="none"></video><span class="play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span></div>
+        <h3>Home</h3><p>The desk at a glance. Clock, weather, every app in reach.</p>
+      </button>
+      <button class="card reveal" data-yt="H-fQiTYJAV4" data-src="assets/gallery/chess.mp4" aria-label="Play Chess">
+        <div class="media"><img src="assets/gallery/chess.webp" alt="" width="720" height="540" loading="lazy"><video muted loop playsinline preload="none"></video><span class="play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span></div>
+        <h3>Chess</h3><p>A full board with no pieces to lose. It plays back.</p>
+      </button>
+      <button class="card reveal" data-yt="NkcO3S3RgWA" data-src="assets/gallery/browser.mp4" aria-label="Play Browser">
+        <div class="media"><img src="assets/gallery/browser.webp" alt="" width="720" height="540" loading="lazy"><video muted loop playsinline preload="none"></video><span class="play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span></div>
+        <h3>Browser</h3><p>The web at desk size. Pinch, scroll, tap.</p>
+      </button>
+      <button class="card reveal" data-yt="n02_uJRY94M" data-src="assets/gallery/earth.mp4" aria-label="Play Earth">
+        <div class="media"><img src="assets/gallery/earth.webp" alt="" width="720" height="540" loading="lazy"><video muted loop playsinline preload="none"></video><span class="play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span></div>
+        <h3>Earth</h3><p>The whole planet under your hands.</p>
+      </button>
+      <button class="card reveal" data-yt="A4yp3IgU63Y" data-src="assets/gallery/vinyls.mp4" aria-label="Play Vinyls">
+        <div class="media"><img src="assets/gallery/vinyls.webp" alt="" width="720" height="540" loading="lazy"><video muted loop playsinline preload="none"></video><span class="play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span></div>
+        <h3>Vinyls</h3><p>Put on a record. Scratch it.</p>
+      </button>
+      <button class="card reveal" data-yt="y228KXS4wVg" data-src="assets/gallery/newspaper.mp4" aria-label="Play Newspaper">
+        <div class="media"><img src="assets/gallery/newspaper.webp" alt="" width="720" height="540" loading="lazy"><video muted loop playsinline preload="none"></video><span class="play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span></div>
+        <h3>Newspaper</h3><p>The morning paper, laid out on the table.</p>
+      </button>
+      <button class="card reveal" data-yt="HG1q5wkIn6g" data-src="assets/gallery/air-hockey.mp4" aria-label="Play Air hockey">
+        <div class="media"><img src="assets/gallery/air-hockey.webp" alt="" width="720" height="540" loading="lazy"><video muted loop playsinline preload="none"></video><span class="play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span></div>
+        <h3>Air hockey</h3><p>Your palm is the paddle.</p>
+      </button>
+      <button class="card reveal" data-yt="Kt7czlsjFJk" data-src="assets/gallery/pong.mp4" aria-label="Play Pong">
+        <div class="media"><img src="assets/gallery/pong.webp" alt="" width="720" height="540" loading="lazy"><video muted loop playsinline preload="none"></video><span class="play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span></div>
+        <h3>Pong</h3><p>Two paddles, one desk.</p>
+      </button>
+      <button class="card reveal" data-yt="8l_HrdypTt8" data-src="assets/gallery/books.mp4" aria-label="Play Books">
+        <div class="media"><img src="assets/gallery/books.webp" alt="" width="720" height="540" loading="lazy"><video muted loop playsinline preload="none"></video><span class="play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span></div>
+        <h3>Books</h3><p>Put a book down. It knows which one.</p>
+      </button>
+      <button class="card reveal" data-yt="rLkvr6TPuFc" data-src="assets/gallery/dodger.mp4" aria-label="Play Dodger">
+        <div class="media"><img src="assets/gallery/dodger.webp" alt="" width="720" height="540" loading="lazy"><video muted loop playsinline preload="none"></video><span class="play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span></div>
+        <h3>Dodger</h3><p>A toy car, steering through obstacles made of light.</p>
+      </button>
+    </div>
+  </section>
+
+  <!-- ═══ COLORS ═══ -->
+  <section class="colors" id="colors">
+    <div class="wrap">
+      <div class="head">
+        <h2 class="reveal">Six colors. One <em>idea</em>.</h2>
+        <p class="lede reveal d1">A lamp that clamps to the desk you already have. Nothing to mount, nothing to wear.</p>
+        <div class="swatches reveal d1" aria-hidden="true">
+          <i style="background:var(--red)"></i><i style="background:var(--orange)"></i><i style="background:var(--yellow)"></i><i style="background:var(--green)"></i><i style="background:var(--blue)"></i><i style="background:var(--violet)"></i>
+        </div>
+      </div>
+      <div class="stage reveal d1">
+        <img src="assets/bouquet.webp" alt="Six Prism lamps in red, orange, yellow, green, blue and violet, fanned like a bouquet" width="1702" height="1043" loading="lazy">
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ VISION ═══ -->
+  <section class="band">
+    <div class="wrap">
+      <div class="head">
+        <h2 class="reveal">The desk is the <em>platform</em>.</h2>
+        <p class="lede reveal d1">Every computer so far has asked you to look away from the desk and into a screen. Prism is the first one that looks at the desk with you. Everything above is an app. There will be more.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ FOUNDERS ═══ (old site, main.html "Meet the Founders"; the old site names no one, so no names here) -->
+  <section id="founders">
+    <div class="wrap">
+      <div class="head">
+        <h2 class="reveal">Two founders. One little <em>lamp</em>.</h2>
+        <p class="lede reveal d1">Prism is designed and built by hand in San&nbsp;Francisco.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ FAQ ═══ -->
+  <section>
+    <div class="wrap">
+      <div class="head"><h2 class="reveal">Questions.</h2></div>
+      <div class="faq reveal d1">
+        <details><summary>What is Prism?</summary><p>A little lamp that understands the work. There is a projector and a camera inside. It projects a computer onto your desk that you can touch, and it sees whatever is physically on the desk: paper, books, an instrument, your hands.</p></details>
+        <details><summary>What can it see?</summary><p>The surface under the lamp. It reads handwriting, recognizes books and objects, and tracks your hands so you can touch what it draws.</p></details>
+        <details><summary>Is it a tutor?</summary><p>Tutoring is one thing it does, and the one that surprises people most. Underneath, it's a computer that can see your desk. Music, reading, games, maps and the web run on the same lamp.</p></details>
+        <details><summary>Does it work on any desk?</summary><p>It clamps to the edge of the desk you already have, wood or white or anything in between. A flat surface and a little room over it is all it needs.</p></details>
+        <details><summary>When can I get one?</summary><p>Early access first. Leave your email and you'll hear before anyone else, including what it costs.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ CLOSING ═══ -->
+  <section class="close band" id="access">
+    <div class="wrap">
+      <div class="rule reveal"></div>
+      <h2 class="reveal d1">Prism is coming. Get in line.</h2>
+      <p class="lede reveal d2" style="margin:16px auto 0;max-width:40ch">We're building it at Firley. Tell us what's on your desk.</p>
+      <p class="reveal d2" style="margin-top:30px"><a class="btn" href="mailto:hello@firley.org?subject=Prism%20early%20access">Request early access</a></p>
+      <span class="addr reveal d2">hello@firley.org</span>
+    </div>
+  </section>
+
+
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Film">
+    <div class="veil" data-close></div>
+    <div class="panel">
+      <button class="x" data-close aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      <div id="lightbox-mount"></div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <span>&copy; 2026 Firley</span>
+  <span>Augmented reality for your desk. No glasses. No headset.</span>
+</footer>
+
+<script>
+(function(){
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---- hero: words arrive one at a time ---- */
+  var n = 0;
+  document.querySelectorAll('#h1 .line').forEach(function(line){
+    line.innerHTML = line.textContent.split(' ').map(function(w){
+      return '<span class="w" style="--i:' + (n++) + '">' + w + '</span>';
+    }).join(' ');
+  });
+
+  /* ---- progress + nav hairline ---- */
+  var bar = document.getElementById('progress'), hdr = document.getElementById('hdr');
+  function onScroll(){
+    var max = document.documentElement.scrollHeight - window.innerHeight,
+        y = window.scrollY || window.pageYOffset;
+    bar.style.transform = 'scaleX(' + (max > 0 ? y / max : 0) + ')';
+    hdr.classList.toggle('solid', y > 8);
+  }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+
+  /* ---- reveal on scroll ---- */
+  var items = document.querySelectorAll('.reveal');
+  if(reduced || !('IntersectionObserver' in window)){
+    items.forEach(function(el){ el.classList.add('in'); });
+  } else {
+    var ro = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); ro.unobserve(e.target); } });
+    }, {rootMargin:'0px 0px -10% 0px', threshold:0.08});
+    items.forEach(function(el){ ro.observe(el); });
+  }
+
+
+  /* ---- gallery: hover plays the loop, click opens the film with sound ---- */
+  var tiles = document.querySelectorAll('.card'),
+      hoverable = window.matchMedia('(hover: hover) and (pointer: fine)').matches,
+      lb = document.getElementById('lightbox'), mount = document.getElementById('lightbox-mount');
+
+  function startLoop(t){
+    var v = t.querySelector('video');
+    if(!v.src) v.src = t.dataset.src;
+    t.classList.add('playing'); v.play().catch(function(){});
+  }
+  function stopLoop(t){ var v = t.querySelector('video'); v.pause(); t.classList.remove('playing'); }
+
+  function openFilm(id){
+    mount.innerHTML = '<iframe src="https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&rel=0&modestbranding=1&playsinline=1" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen title="Prism film"></iframe>';
+    lb.classList.add('open'); document.body.style.overflow = 'hidden';
+  }
+  function closeFilm(){ lb.classList.remove('open'); mount.innerHTML = ''; document.body.style.overflow = ''; }
+
+  tiles.forEach(function(t){
+    if(hoverable && !reduced){
+      t.addEventListener('mouseenter', function(){ startLoop(t); });
+      t.addEventListener('mouseleave', function(){ stopLoop(t); });
+    }
+    t.addEventListener('click', function(){ openFilm(t.dataset.yt); });
+  });
+  lb.querySelectorAll('[data-close]').forEach(function(el){ el.addEventListener('click', closeFilm); });
+
+  var rail = document.getElementById('rail'), prev = document.getElementById('rail-prev'), next = document.getElementById('rail-next');
+  function step(){ var c = rail.querySelector('.card'); return c ? c.getBoundingClientRect().width + 18 : 400; }
+  function paddles(){
+    prev.disabled = rail.scrollLeft <= 4;
+    next.disabled = rail.scrollLeft + rail.clientWidth >= rail.scrollWidth - 4;
+  }
+  prev.addEventListener('click', function(){ rail.scrollBy({left:-step(), behavior:'smooth'}); });
+  next.addEventListener('click', function(){ rail.scrollBy({left: step(), behavior:'smooth'}); });
+  rail.addEventListener('scroll', paddles, {passive:true}); window.addEventListener('resize', paddles); paddles();
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closeFilm(); });
+
+  /* ---- film: load when near, play only while on screen ---- */
+  var film = document.getElementById('film'), wantsPlay = !reduced,
+      btn = document.getElementById('sound-btn'), label = document.getElementById('sound-label'), wave = document.getElementById('wave');
+  wave.style.opacity = '.25';
+  btn.addEventListener('click', function(){
+    film.muted = !film.muted;
+    var on = !film.muted;
+    btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+    label.textContent = on ? 'Sound off' : 'Sound on';
+    wave.style.opacity = on ? '1' : '.25';
+    if(on){ wantsPlay = true; film.play().catch(function(){}); }
+  });
+  if('IntersectionObserver' in window){
+    new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){ if(!film.src) film.src = 'assets/hero.mp4'; if(wantsPlay) film.play().catch(function(){}); }
+        else film.pause();
+      });
+    }, {rootMargin:'300px 0px', threshold:0.2}).observe(film);
+  } else { film.src = 'assets/hero.mp4'; if(wantsPlay) film.play().catch(function(){}); }
+})();
+</script>
+</body>
+</html>
