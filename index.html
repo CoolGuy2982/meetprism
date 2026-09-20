@@ -127,6 +127,13 @@
     width:min(100%,calc(74svh * 16 / 9));margin-inline:auto;
   }
   .frame video{width:100%;height:auto;display:block;aspect-ratio:16/9}
+  .play-big{
+    position:absolute;inset:0;z-index:2;display:none;place-items:center;
+    border:0;padding:0;background:rgba(0,0,0,.16);cursor:pointer;
+  }
+  .frame.needs-tap .play-big{display:grid}
+  .play-big span{width:68px;height:68px;border-radius:50%;background:rgba(255,255,255,.94);color:#000;display:grid;place-items:center;box-shadow:0 10px 30px -8px rgba(0,0,0,.5)}
+  .play-big svg{width:26px;height:26px;margin-left:4px}
   .sound-btn{
     position:absolute;right:18px;bottom:18px;z-index:2;display:inline-flex;align-items:center;gap:8px;
     padding:9px 15px;border-radius:999px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);
@@ -252,6 +259,12 @@
     .principles,.roles{grid-template-columns:1fr 1fr}
   }
   @media (max-width:640px){
+    section{padding:clamp(56px,9vh,88px) var(--gutter)}
+    .film{padding-top:40px}
+    .frame{width:auto;margin-inline:calc(-1 * var(--gutter) + 10px);border-radius:16px}
+    .sound-btn{right:12px;bottom:12px}
+    /* cards inside a swipe rail should not wait for their own reveal */
+    .roles .reveal,.rail .reveal{opacity:1;transform:none;transition:none}
     .principles{grid-template-columns:1fr}
     /* phones: the roles become a swipeable row */
     .roles{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;margin-inline:calc(-1 * var(--gutter));padding:0 var(--gutter);scroll-padding:0 var(--gutter)}
@@ -299,7 +312,8 @@
   <section class="film" id="what-it-does">
     <div class="wrap">
       <div class="frame reveal">
-        <video id="film" poster="assets/hero.jpg" muted loop playsinline preload="metadata" aria-label="Prism projecting an interactive interface onto a desk"></video>
+        <video id="film" src="assets/hero.mp4" poster="assets/hero.jpg" autoplay muted loop playsinline preload="metadata" aria-label="Prism projecting an interactive interface onto a desk"></video>
+        <button class="play-big" id="play-big" type="button" aria-label="Play the film"><span><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span></button>
         <button class="sound-btn" id="sound-btn" aria-pressed="false">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path id="wave" d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"/></svg>
           <span id="sound-label">Sound on</span>
@@ -528,6 +542,12 @@
   }
   function closeFilm(){ lb.classList.remove('open'); mount.innerHTML = ''; document.body.style.overflow = ''; }
 
+  if(!hoverable && !reduced && 'IntersectionObserver' in window){
+    var lo = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ if(e.isIntersecting) startLoop(e.target); else stopLoop(e.target); });
+    }, {threshold:0.6});
+    tiles.forEach(function(t){ lo.observe(t); });
+  }
   tiles.forEach(function(t){
     if(hoverable && !reduced){
       t.addEventListener('mouseenter', function(){ startLoop(t); });
@@ -549,7 +569,9 @@
   document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closeFilm(); });
 
   /* ---- film: load when near, play only while on screen ---- */
-  var film = document.getElementById('film'), wantsPlay = !reduced,
+  var film = document.getElementById('film'), wantsPlay = !reduced;
+  if(reduced){ film.removeAttribute('autoplay'); film.pause(); }
+  var _unused = 0,
       btn = document.getElementById('sound-btn'), label = document.getElementById('sound-label'), wave = document.getElementById('wave');
   wave.style.opacity = '.25';
   btn.addEventListener('click', function(){
@@ -560,14 +582,30 @@
     wave.style.opacity = on ? '1' : '.25';
     if(on){ wantsPlay = true; film.play().catch(function(){}); }
   });
+  var frame = film.parentNode, big = document.getElementById('play-big'), check = null;
+
+  /* if the browser refuses autoplay (iOS low power mode, data saver), show a real play button */
+  function tryPlay(){
+    var p = film.play();
+    if(p && p.catch) p.catch(function(){ frame.classList.add('needs-tap'); });
+    clearTimeout(check);
+    check = setTimeout(function(){ if(film.paused) frame.classList.add('needs-tap'); }, 1500);
+  }
+  film.addEventListener('playing', function(){ frame.classList.remove('needs-tap'); clearTimeout(check); });
+  big.addEventListener('click', function(){
+    film.muted = false; wantsPlay = true;
+    btn.setAttribute('aria-pressed','true'); label.textContent = 'Sound off'; wave.style.opacity = '1';
+    frame.classList.remove('needs-tap'); film.play().catch(function(){});
+  });
+
   if('IntersectionObserver' in window){
     new IntersectionObserver(function(entries){
       entries.forEach(function(e){
-        if(e.isIntersecting){ if(!film.src) film.src = 'assets/hero.mp4'; if(wantsPlay) film.play().catch(function(){}); }
+        if(e.isIntersecting){ if(wantsPlay) tryPlay(); }
         else film.pause();
       });
-    }, {rootMargin:'300px 0px', threshold:0.2}).observe(film);
-  } else { film.src = 'assets/hero.mp4'; if(wantsPlay) film.play().catch(function(){}); }
+    }, {rootMargin:'200px 0px', threshold:0.2}).observe(film);
+  } else if(wantsPlay){ tryPlay(); }
 })();
 </script>
 </body>
