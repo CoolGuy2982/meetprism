@@ -162,6 +162,15 @@
   .show-list button[aria-selected="true"]{color:var(--fg)}
   .show-list button[aria-selected="true"]::before{opacity:1;transform:none}
   .show-stage{position:relative;aspect-ratio:1;border-radius:var(--radius);overflow:hidden;background:var(--tile)}
+  /* on a desktop the whole showcase fits one screen: the square is capped by the viewport height,
+     and the list tightens on short screens */
+  @media (min-width:901px){
+    #made-for-you{--pad:clamp(40px,7vh,96px);padding-top:var(--pad);padding-bottom:var(--pad)}
+    .show-stage{width:min(100%,calc(100svh - var(--nav) - 2 * var(--pad)));margin-left:auto}
+    .show-list{margin-top:min(30px,3vh)}
+    .show-list button{padding:min(8px,.8vh) 0;font-size:min(1.3rem,2.4vh)}
+    .show-copy .lede{font-size:min(1.2rem,2.1vh)}
+  }
   .show-stage img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;opacity:0;transition:opacity .7s var(--ease)}
   .show-stage img.on{opacity:1}
 
