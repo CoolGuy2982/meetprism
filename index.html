@@ -144,17 +144,26 @@
   .sound-btn:hover{background:rgba(255,255,255,.26)}
   .sound-btn svg{width:15px;height:15px;flex:none}
 
-  /* ---- roles: five things it is, each a render with the words on it ---- */
-  .roles{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:clamp(36px,5vh,56px)}
-  .role{
-    position:relative;aspect-ratio:1;border-radius:22px;overflow:hidden;background:var(--tile);
-    display:flex;flex-direction:column;justify-content:flex-end;padding:16px 15px;color:#fff;
+  /* ---- roles: a list on the left, one large render on the right ---- */
+  .showcase{display:grid;grid-template-columns:5fr 7fr;gap:clamp(32px,5vw,80px);align-items:center}
+  .show-copy .lede{margin-top:16px;max-width:36ch}
+  .show-list{list-style:none;margin-top:30px;display:flex;flex-direction:column}
+  .show-list button{
+    display:flex;align-items:center;gap:14px;width:100%;text-align:left;
+    background:none;border:0;padding:8px 0;cursor:pointer;font:inherit;
+    font-size:clamp(1.05rem,1.45vw,1.3rem);font-weight:600;letter-spacing:-.02em;color:#b0b0b5;
+    transition:color .3s var(--ease);
   }
-  .role img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;transition:transform .8s var(--ease)}
-  .role:hover img{transform:scale(1.04)}
-  .role::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.62),rgba(0,0,0,.18) 45%,transparent 70%)}
-  .role h3{position:relative;z-index:1;text-shadow:0 1px 12px rgba(0,0,0,.35)}
-  .role h3{font-size:1.05rem}
+  .show-list button::before{
+    content:"";width:20px;height:3px;border-radius:2px;background:var(--prism);flex:none;
+    opacity:0;transform:scaleX(.3);transform-origin:left;transition:opacity .35s var(--ease),transform .35s var(--ease);
+  }
+  .show-list button:hover{color:var(--dim)}
+  .show-list button[aria-selected="true"]{color:var(--fg)}
+  .show-list button[aria-selected="true"]::before{opacity:1;transform:none}
+  .show-stage{position:relative;aspect-ratio:1;border-radius:var(--radius);overflow:hidden;background:var(--tile)}
+  .show-stage img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;opacity:0;transition:opacity .7s var(--ease)}
+  .show-stage img.on{opacity:1}
 
   /* ---- principles ---- */
   .principles{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:clamp(36px,5vh,56px)}
@@ -254,7 +263,16 @@
 
   @media (max-width:900px){
     nav.links{display:none}
-    .principles,.roles{grid-template-columns:1fr 1fr}
+    .principles{grid-template-columns:1fr 1fr}
+    .showcase{grid-template-columns:1fr;gap:24px}
+    .show-copy{text-align:center;display:contents}
+    .show-copy h2{order:0}.show-copy .lede{order:1;margin:12px auto 0}.show-stage{order:2}.show-list{order:3}
+    .show-list{flex-direction:row;gap:8px;overflow-x:auto;scroll-snap-type:x proximity;scrollbar-width:none;margin:4px calc(-1 * var(--gutter)) 0;padding:0 var(--gutter)}
+    .show-list::-webkit-scrollbar{display:none}
+    .show-list li{flex:none;scroll-snap-align:center}
+    .show-list button{width:auto;padding:9px 15px;border-radius:999px;background:var(--tile);font-size:14px;color:var(--dim);white-space:nowrap}
+    .show-list button::before{display:none}
+    .show-list button[aria-selected="true"]{background:var(--fg);color:#fff}
   }
   @media (max-width:640px){
     section{padding:clamp(56px,9vh,88px) var(--gutter)}
@@ -262,12 +280,8 @@
     .frame{width:auto;margin-inline:calc(-1 * var(--gutter) + 10px);border-radius:16px}
     .sound-btn{right:12px;bottom:12px}
     /* cards inside a swipe rail should not wait for their own reveal */
-    .roles .reveal,.rail .reveal{opacity:1;transform:none;transition:none}
+    .rail .reveal{opacity:1;transform:none;transition:none}
     .principles{grid-template-columns:1fr}
-    /* phones: the roles become a swipeable row */
-    .roles{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;margin-inline:calc(-1 * var(--gutter));padding:0 var(--gutter);scroll-padding:0 var(--gutter)}
-    .roles::-webkit-scrollbar{display:none}
-    .role{flex:none;width:68vw;scroll-snap-align:start}
     .paddles{display:none}
     .hero .stage{margin-left:calc(-1 * var(--gutter) + 8px);margin-right:calc(-1 * var(--gutter) + 8px)}
     footer{flex-direction:column}
@@ -320,24 +334,36 @@
     </div>
   </section>
 
-  <!-- ═══ ROLES ═══ -->
+  <!-- ═══ ROLES: one image at a time, chosen from a list ═══ -->
   <section id="made-for-you">
-    <div class="wrap">
-      <div class="head">
+    <div class="wrap showcase">
+      <div class="show-copy">
         <h2 class="reveal">Made for whatever’s on the <em>desk</em>.</h2>
         <p class="lede reveal d1">No two desks are the same. Prism works with what’s on yours.</p>
+        <ul class="show-list reveal d1" role="tablist" id="show-list">
+          <li><button type="button" role="tab" aria-selected="true" data-i="0">The tutor</button></li>
+          <li><button type="button" role="tab" aria-selected="false" data-i="1">The piano teacher</button></li>
+          <li><button type="button" role="tab" aria-selected="false" data-i="2">The reading partner</button></li>
+          <li><button type="button" role="tab" aria-selected="false" data-i="3">The flashcard maker</button></li>
+          <li><button type="button" role="tab" aria-selected="false" data-i="4">The chess board</button></li>
+          <li><button type="button" role="tab" aria-selected="false" data-i="5">The language coach</button></li>
+          <li><button type="button" role="tab" aria-selected="false" data-i="6">The lab bench</button></li>
+          <li><button type="button" role="tab" aria-selected="false" data-i="7">The drawing guide</button></li>
+          <li><button type="button" role="tab" aria-selected="false" data-i="8">The arcade</button></li>
+          <li><button type="button" role="tab" aria-selected="false" data-i="9">The second screen</button></li>
+        </ul>
       </div>
-      <div class="roles">
-        <div class="role reveal"><img src="assets/role-tutor.webp" alt="" width="2000" height="2000" loading="lazy"><h3>The tutor</h3></div>
-        <div class="role reveal"><img src="assets/role-piano.webp" alt="" width="2000" height="2000" loading="lazy"><h3>The piano teacher</h3></div>
-        <div class="role reveal"><img src="assets/role-reading.webp" alt="" width="2000" height="2000" loading="lazy"><h3>The reading partner</h3></div>
-        <div class="role reveal"><img src="assets/role-flashcards.webp" alt="" width="2000" height="2000" loading="lazy"><h3>The flashcard maker</h3></div>
-        <div class="role reveal"><img src="assets/role-chess.webp" alt="" width="2000" height="2000" loading="lazy"><h3>The chess board</h3></div>
-        <div class="role reveal"><img src="assets/role-language.webp" alt="" width="1024" height="1024" loading="lazy"><h3>The language coach</h3></div>
-        <div class="role reveal"><img src="assets/role-lab.webp" alt="" width="1024" height="1024" loading="lazy"><h3>The lab bench</h3></div>
-        <div class="role reveal"><img src="assets/role-drawing.webp" alt="" width="1024" height="1024" loading="lazy"><h3>The drawing guide</h3></div>
-        <div class="role reveal"><img src="assets/role-arcade.webp" alt="" width="1024" height="1024" loading="lazy"><h3>The arcade</h3></div>
-        <div class="role reveal"><img src="assets/role-screen.webp" alt="" width="1024" height="1024" loading="lazy"><h3>The second screen</h3></div>
+      <div class="show-stage reveal d1" id="show-stage" aria-live="polite">
+        <img src="assets/role-tutor.webp" alt="The tutor" width="1024" height="1024" class="on" decoding="async">
+        <img src="assets/role-piano.webp" alt="The piano teacher" width="1024" height="1024" loading="lazy" decoding="async">
+        <img src="assets/role-reading.webp" alt="The reading partner" width="1024" height="1024" loading="lazy" decoding="async">
+        <img src="assets/role-flashcards.webp" alt="The flashcard maker" width="1024" height="1024" loading="lazy" decoding="async">
+        <img src="assets/role-chess.webp" alt="The chess board" width="1024" height="1024" loading="lazy" decoding="async">
+        <img src="assets/role-language.webp" alt="The language coach" width="1024" height="1024" loading="lazy" decoding="async">
+        <img src="assets/role-lab.webp" alt="The lab bench" width="1024" height="1024" loading="lazy" decoding="async">
+        <img src="assets/role-drawing.webp" alt="The drawing guide" width="1024" height="1024" loading="lazy" decoding="async">
+        <img src="assets/role-arcade.webp" alt="The arcade" width="1024" height="1024" loading="lazy" decoding="async">
+        <img src="assets/role-screen.webp" alt="The second screen" width="1024" height="1024" loading="lazy" decoding="async">
       </div>
     </div>
   </section>
@@ -556,6 +582,34 @@
     t.addEventListener('click', function(){ openFilm(t.dataset.yt); });
   });
   lb.querySelectorAll('[data-close]').forEach(function(el){ el.addEventListener('click', closeFilm); });
+
+
+  /* ---- roles showcase: the list drives the image; it rotates until touched ---- */
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('#show-list button')),
+      shots = Array.prototype.slice.call(document.querySelectorAll('#show-stage img')),
+      list = document.getElementById('show-list'), cur = 0, spin = null, touched = false;
+
+  function show(i){
+    tabs[cur].setAttribute('aria-selected','false'); shots[cur].classList.remove('on');
+    cur = i;
+    tabs[cur].setAttribute('aria-selected','true'); shots[cur].classList.add('on');
+    if(list.scrollWidth > list.clientWidth){   /* phone: keep the active pill in view */
+      var t = tabs[cur], x = t.offsetLeft - (list.clientWidth - t.offsetWidth) / 2;
+      list.scrollTo({left:x, behavior:'smooth'});
+    }
+  }
+  function stopSpin(){ clearInterval(spin); spin = null; }
+  function startSpin(){ if(reduced || touched || spin) return; spin = setInterval(function(){ show((cur + 1) % tabs.length); }, 3600); }
+
+  tabs.forEach(function(t, i){
+    t.addEventListener('click', function(){ touched = true; stopSpin(); show(i); });
+    if(hoverable) t.addEventListener('mouseenter', function(){ touched = true; stopSpin(); show(i); });
+  });
+  if('IntersectionObserver' in window){
+    new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ if(e.isIntersecting) startSpin(); else stopSpin(); });
+    }, {threshold:0.35}).observe(document.getElementById('show-stage'));
+  } else { startSpin(); }
 
   var rail = document.getElementById('rail'), prev = document.getElementById('rail-prev'), next = document.getElementById('rail-next');
   function step(){ var c = rail.querySelector('.card'); return c ? c.getBoundingClientRect().width + 18 : 400; }
