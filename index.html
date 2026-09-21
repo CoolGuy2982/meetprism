@@ -145,16 +145,16 @@
   .sound-btn svg{width:15px;height:15px;flex:none}
 
   /* ---- roles: five things it is, each a render with the words on it ---- */
-  .roles{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:clamp(36px,5vh,56px)}
+  .roles{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:clamp(36px,5vh,56px)}
   .role{
     position:relative;aspect-ratio:1;border-radius:22px;overflow:hidden;background:var(--tile);
-    display:flex;flex-direction:column;justify-content:flex-end;padding:20px 18px;color:#fff;
+    display:flex;flex-direction:column;justify-content:flex-end;padding:16px 15px;color:#fff;
   }
   .role img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;transition:transform .8s var(--ease)}
   .role:hover img{transform:scale(1.04)}
   .role::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.62),rgba(0,0,0,.18) 45%,transparent 70%)}
   .role h3{position:relative;z-index:1;text-shadow:0 1px 12px rgba(0,0,0,.35)}
-  .role h3{font-size:1.2rem}
+  .role h3{font-size:1.05rem}
 
   /* ---- principles ---- */
   .principles{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:clamp(36px,5vh,56px)}
@@ -337,6 +337,7 @@
         <div class="role reveal"><img src="assets/role-lab.webp" alt="" width="1024" height="1024" loading="lazy"><h3>The lab bench</h3></div>
         <div class="role reveal"><img src="assets/role-drawing.webp" alt="" width="1024" height="1024" loading="lazy"><h3>The drawing guide</h3></div>
         <div class="role reveal"><img src="assets/role-arcade.webp" alt="" width="1024" height="1024" loading="lazy"><h3>The arcade</h3></div>
+        <div class="role reveal"><img src="assets/role-screen.webp" alt="" width="1024" height="1024" loading="lazy"><h3>The second screen</h3></div>
       </div>
     </div>
   </section>
