@@ -267,9 +267,9 @@
     .showcase{grid-template-columns:1fr;gap:24px}
     .show-copy{text-align:center;display:contents}
     .show-copy h2{order:0}.show-copy .lede{order:1;margin:12px auto 0}.show-stage{order:2}.show-list{order:3}
-    .show-list{flex-direction:row;gap:8px;overflow-x:auto;scroll-snap-type:x proximity;scrollbar-width:none;margin:4px calc(-1 * var(--gutter)) 0;padding:0 var(--gutter)}
+    .show-list{flex-direction:row;gap:8px;overflow-x:auto;scrollbar-width:none;margin:4px calc(-1 * var(--gutter)) 0;padding:0 var(--gutter)}
     .show-list::-webkit-scrollbar{display:none}
-    .show-list li{flex:none;scroll-snap-align:center}
+    .show-list li{flex:none}
     .show-list button{width:auto;padding:9px 15px;border-radius:999px;background:var(--tile);font-size:14px;color:var(--dim);white-space:nowrap}
     .show-list button::before{display:none}
     .show-list button[aria-selected="true"]{background:var(--fg);color:#fff}
@@ -607,7 +607,10 @@
   });
   if('IntersectionObserver' in window){
     new IntersectionObserver(function(entries){
-      entries.forEach(function(e){ if(e.isIntersecting) startSpin(); else stopSpin(); });
+      entries.forEach(function(e){
+        if(e.isIntersecting){ shots.forEach(function(im){ im.loading = 'eager'; }); startSpin(); }
+        else stopSpin();
+      });
     }, {threshold:0.35}).observe(document.getElementById('show-stage'));
   } else { startSpin(); }
 
