@@ -302,8 +302,9 @@
   @media (max-width:640px){
     section{padding:clamp(56px,9vh,88px) var(--gutter)}
     .frame{width:auto;margin-inline:calc(-1 * var(--gutter) + 10px);border-radius:16px}
-    /* on a phone the headline stands alone, and the button moves under the film */
+    /* on a phone the headline stands alone, with the subline's room kept as air, and the button moves under the film */
     .hero .lede{display:none}
+    .hero .frame{margin-top:clamp(56px,9vh,88px)}
     .hero .hero-cta.wide{display:none}
     .hero .hero-cta.narrow{display:inline-flex;margin-top:28px}
     .sound-btn{right:12px;bottom:12px}
