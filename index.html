@@ -114,9 +114,6 @@
   .hero h1{font-size:clamp(2.6rem,min(6.2vw,9.5vh),5.4rem);font-weight:300;letter-spacing:-.04em;max-width:14ch;margin:clamp(8px,1.4vh,16px) auto 0}
   .hero h1 .w{display:inline-block;opacity:0;transform:translateY(.35em);animation:word .9s var(--ease) forwards;animation-delay:calc(var(--i) * 55ms)}
   @keyframes word{to{opacity:1;transform:none}}
-  .hero .lede{margin:clamp(18px,2.6vh,28px) auto 0;max-width:52ch;color:#424245;font-size:clamp(1.05rem,1.5vw,1.35rem);line-height:1.45;opacity:0;animation:word 1s var(--ease) .7s forwards}
-  /* each sentence stays whole: a narrow screen breaks between them, never inside one */
-  .hero .lede span{display:inline-block}
   /* the film sits right under the line: the first thing anyone sees is the lamp at work */
   /* the hero carries the preorder button; the bar's copy waits until it has scrolled away */
   .hero .hero-cta{margin-top:clamp(20px,3vh,32px);opacity:0;animation:word 1s var(--ease) .9s forwards}
@@ -229,7 +226,6 @@
   }
   .card .play svg{width:14px;height:14px;margin-left:2px}
   .card h3{margin:16px 0 4px;font-size:1.1rem}
-  .card p{font-size:14.5px;color:var(--dim);line-height:1.45;text-wrap:pretty}
 
   .lightbox{position:fixed;inset:0;z-index:200;display:none;align-items:center;justify-content:center;padding:24px}
   .lightbox.open{display:flex}
@@ -302,8 +298,7 @@
   @media (max-width:640px){
     section{padding:clamp(56px,9vh,88px) var(--gutter)}
     .frame{width:auto;margin-inline:calc(-1 * var(--gutter) + 10px);border-radius:16px}
-    /* on a phone the headline stands alone, with the subline's room kept as air, and the button moves under the film */
-    .hero .lede{display:none}
+    /* on a phone the headline stands alone with air under it, and the button moves under the film */
     .hero .frame{margin-top:clamp(56px,9vh,88px)}
     .hero .hero-cta.wide{display:none}
     .hero .hero-cta.narrow{display:inline-flex;margin-top:28px}
@@ -317,7 +312,7 @@
   @media (prefers-reduced-motion:reduce){
     html{scroll-behavior:auto}
     .reveal{opacity:1;transform:none;transition:none}
-    .hero .eyebrow,.hero h1 .w,.hero .lede,.hero .frame,.hero .hero-cta,.stage img{animation:none;opacity:1;transform:none}
+    .hero .eyebrow,.hero h1 .w,.hero .frame,.hero .hero-cta,.stage img{animation:none;opacity:1;transform:none}
     .btn:hover{transform:none}
   }
 </style>
@@ -337,7 +332,6 @@
   <section class="hero">
     <p class="eyebrow"><img src="assets/prism-mark.svg" alt="" width="22" height="18">Prism</p>
     <h1 id="h1"><span class="line">The brightest thing on your desk.</span></h1>
-    <p class="lede"><span>Learn, play, and create.</span> <span>Right on your desk.</span></p>
     <a class="btn hero-cta wide" href="preorder/">Preorder for $250</a>
     <div class="frame" id="what-it-does">
       <video id="film" src="assets/hero.mp4" poster="assets/hero-poster.jpg" autoplay muted loop playsinline preload="auto" aria-label="Prism projecting an interactive interface onto a desk"></video>
@@ -356,7 +350,6 @@
     <div class="wrap">
       <div class="head">
         <h2 class="reveal">Six colors. One <em>idea</em>.</h2>
-        <p class="lede reveal d1">A tutor, a piano teacher, and an arcade. All in one lamp.</p>
         <div class="swatches reveal d1" aria-hidden="true">
           <i style="background:var(--red)"></i><i style="background:var(--orange)"></i><i style="background:var(--yellow)"></i><i style="background:var(--green)"></i><i style="background:var(--blue)"></i><i style="background:var(--violet)"></i>
         </div>
@@ -414,43 +407,43 @@
     <div class="rail" id="rail">
       <button class="card reveal" data-yt="H-fQiTYJAV4" data-src="assets/gallery/chess.mp4" aria-label="Play Chess">
         <div class="media"><img src="assets/gallery/chess.webp" alt="" width="720" height="540" loading="lazy"><video muted loop playsinline preload="none"></video><span class="play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span></div>
-        <h3>Chess</h3><p>No pieces to lose. It plays back.</p>
+        <h3>Chess</h3>
       </button>
       <button class="card reveal" data-yt="dS0Vy89RNks" data-src="assets/gallery/home.mp4" aria-label="Play Home">
         <div class="media"><img src="assets/gallery/home.webp" alt="" width="720" height="540" loading="lazy"><video muted loop playsinline preload="none"></video><span class="play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span></div>
-        <h3>Home</h3><p>Every app, one tap away.</p>
+        <h3>Home</h3>
       </button>
       <button class="card reveal" data-yt="NkcO3S3RgWA" data-src="assets/gallery/browser.mp4" aria-label="Play Browser">
         <div class="media"><img src="assets/gallery/browser.webp" alt="" width="720" height="540" loading="lazy"><video muted loop playsinline preload="none"></video><span class="play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span></div>
-        <h3>Browser</h3><p>The web, desk-sized.</p>
+        <h3>Browser</h3>
       </button>
       <button class="card reveal" data-yt="n02_uJRY94M" data-src="assets/gallery/earth.mp4" aria-label="Play Earth">
         <div class="media"><img src="assets/gallery/earth.webp" alt="" width="720" height="540" loading="lazy"><video muted loop playsinline preload="none"></video><span class="play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span></div>
-        <h3>Earth</h3><p>The whole planet under your hands.</p>
+        <h3>Earth</h3>
       </button>
       <button class="card reveal" data-yt="A4yp3IgU63Y" data-src="assets/gallery/vinyls.mp4" aria-label="Play Vinyls">
         <div class="media"><img src="assets/gallery/vinyls.webp" alt="" width="720" height="540" loading="lazy"><video muted loop playsinline preload="none"></video><span class="play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span></div>
-        <h3>Vinyls</h3><p>Put on a record. Scratch it.</p>
+        <h3>Vinyls</h3>
       </button>
       <button class="card reveal" data-yt="y228KXS4wVg" data-src="assets/gallery/newspaper.mp4" aria-label="Play Newspaper">
         <div class="media"><img src="assets/gallery/newspaper.webp" alt="" width="720" height="540" loading="lazy"><video muted loop playsinline preload="none"></video><span class="play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span></div>
-        <h3>Newspaper</h3><p>The morning paper, minus the paper.</p>
+        <h3>Newspaper</h3>
       </button>
       <button class="card reveal" data-yt="HG1q5wkIn6g" data-src="assets/gallery/air-hockey.mp4" aria-label="Play Air hockey">
         <div class="media"><img src="assets/gallery/air-hockey.webp" alt="" width="720" height="540" loading="lazy"><video muted loop playsinline preload="none"></video><span class="play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span></div>
-        <h3>Air hockey</h3><p>Your palm is the paddle.</p>
+        <h3>Air hockey</h3>
       </button>
       <button class="card reveal" data-yt="Kt7czlsjFJk" data-src="assets/gallery/pong.mp4" aria-label="Play Pong">
         <div class="media"><img src="assets/gallery/pong.webp" alt="" width="720" height="540" loading="lazy"><video muted loop playsinline preload="none"></video><span class="play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span></div>
-        <h3>Pong</h3><p>Two paddles, one desk.</p>
+        <h3>Pong</h3>
       </button>
       <button class="card reveal" data-yt="8l_HrdypTt8" data-src="assets/gallery/books.mp4" aria-label="Play Books">
         <div class="media"><img src="assets/gallery/books.webp" alt="" width="720" height="540" loading="lazy"><video muted loop playsinline preload="none"></video><span class="play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span></div>
-        <h3>Books</h3><p>Put a book down. It knows which one.</p>
+        <h3>Books</h3>
       </button>
       <button class="card reveal" data-yt="rLkvr6TPuFc" data-src="assets/gallery/dodger.mp4" aria-label="Play Dodger">
         <div class="media"><img src="assets/gallery/dodger.webp" alt="" width="720" height="540" loading="lazy"><video muted loop playsinline preload="none"></video><span class="play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span></div>
-        <h3>Dodger</h3><p>A real toy car. Obstacles made of light.</p>
+        <h3>Dodger</h3>
       </button>
     </div>
   </section>
