@@ -62,8 +62,9 @@
     z-index:100;pointer-events:none;
   }
 
-  /* ---- nav: nothing at the top; the bar, name and button arrive together
-     once the hero's preorder button has scrolled away ---- */
+  /* ---- nav: on a phone, nothing at the top; the bar, name and button arrive together
+     once the hero's preorder button has scrolled away. On a laptop the name and button
+     sit there from the start, bare, and the bar fills in behind them on the first scroll ---- */
   header{
     position:fixed;top:0;left:0;right:0;z-index:90;height:var(--nav);
     display:flex;align-items:center;justify-content:space-between;
@@ -120,6 +121,14 @@
   .hero .hero-cta.narrow{display:none}
   header:not(.show) .nav-btn{opacity:0;pointer-events:none}
   .hero .frame{margin-top:clamp(24px,4vh,44px);opacity:0;animation:settle 1.4s var(--ease) .35s forwards}
+  /* on a laptop the bar carries the name and the button, so the hero is the headline alone,
+     centred in the room the name and button used to fill */
+  @media (min-width:641px){
+    .wordmark,header:not(.show) .nav-btn{opacity:1;transform:none;pointer-events:auto}
+    .hero .eyebrow,.hero .hero-cta.wide{display:none}
+    .hero h1{margin-top:clamp(40px,9.4vh,100px)}
+    .hero .frame{margin-top:clamp(40px,9.4vh,100px)}
+  }
   .stage img{
     width:100%;height:100%;object-fit:cover;display:block;
     /* the arms dissolve into the page over the bottom third, so the image has no bottom edge */
@@ -509,8 +518,9 @@
     var max = document.documentElement.scrollHeight - window.innerHeight,
         y = window.scrollY || window.pageYOffset;
     bar.style.transform = 'scaleX(' + (max > 0 ? y / max : 0) + ')';
-    var cta = ctas[0].offsetParent ? ctas[0] : ctas[1];   /* the one that is displayed */
-    hdr.classList.toggle('show', cta.getBoundingClientRect().bottom < 0);
+    var cta = ctas[0].offsetParent ? ctas[0] : ctas[1].offsetParent ? ctas[1] : null;   /* the one that is displayed */
+    /* a laptop shows no hero button, so the bar fills in as soon as the page moves */
+    hdr.classList.toggle('show', cta ? cta.getBoundingClientRect().bottom < 0 : y > 0);
   }
   window.addEventListener('scroll', onScroll, {passive:true});
   onScroll();
