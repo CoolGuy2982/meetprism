@@ -276,6 +276,9 @@
   .faq details[open] summary::after{transform:translateY(-50%) rotate(45deg)}
   .faq details p{padding:0 0 22px;color:var(--dim);font-size:15.5px;line-height:1.55;max-width:60ch;text-wrap:pretty}
 
+  /* ---- the first film: waits for a tap, then plays with sound and its own controls ---- */
+  .early .frame{margin-top:clamp(32px,5vh,48px)}
+
   /* ---- closing ---- */
   .close{text-align:center}
   /* the lineup closes the page beside the price. The render has ~16% empty white above the lamps
@@ -343,7 +346,10 @@
     <h1 id="h1"><span class="line">The brightest thing on your desk</span></h1>
     <a class="btn hero-cta wide" href="preorder/">Preorder for $250</a>
     <div class="frame" id="what-it-does">
-      <video id="film" src="assets/hero.mp4" poster="assets/hero-poster.jpg" autoplay muted loop playsinline preload="auto" aria-label="Prism projecting an interactive interface onto a desk"></video>
+      <video id="film" poster="assets/hero-v2-poster.jpg" autoplay muted loop playsinline preload="auto" aria-label="The Prism film: a day with the lamp, from piano practice to dinner">
+        <source src="assets/hero-v2-720.mp4" type="video/mp4" media="(max-width: 900px)">
+        <source src="assets/hero-v2.mp4" type="video/mp4">
+      </video>
       <button class="play-big" id="play-big" type="button" aria-label="Play the film"><span><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span></button>
       <button class="sound-btn" id="sound-btn" aria-pressed="false">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path id="wave" d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"/></svg>
@@ -450,8 +456,8 @@
         <div class="media"><img src="assets/gallery/books.webp" alt="" width="720" height="540" loading="lazy"><video muted loop playsinline preload="none"></video><span class="play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span></div>
         <h3>Books</h3>
       </button>
-      <button class="card reveal" data-yt="rLkvr6TPuFc" data-src="assets/gallery/dodger.mp4" aria-label="Play Dodger">
-        <div class="media"><img src="assets/gallery/dodger.webp" alt="" width="720" height="540" loading="lazy"><video muted loop playsinline preload="none"></video><span class="play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span></div>
+      <button class="card reveal" data-yt="rLkvr6TPuFc" data-src="assets/gallery/dodger-v2.mp4" aria-label="Play Dodger">
+        <div class="media"><img src="assets/gallery/dodger-v2.webp" alt="" width="720" height="540" loading="lazy"><video muted loop playsinline preload="none"></video><span class="play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span></div>
         <h3>Dodger</h3>
       </button>
     </div>
@@ -467,6 +473,17 @@
         <details><summary>Is it a tutor?</summary><p>Tutoring is one thing it does, and the one that surprises people most. Underneath, it's a computer that can see your desk. Music, reading, games, maps, and the web run on the same lamp.</p></details>
         <details><summary>Does it work on any desk?</summary><p>It clamps to the edge of the desk you already have, wood or white or anything in between. A flat surface and a little room over it is all it needs.</p></details>
         <details><summary>When can I get one?</summary><p>Preorders open mid November 2026, at an anticipated $250. Reserve now and you get a 10% code by email, and first word when the day comes.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ THE FIRST FILM ═══ -->
+  <section class="early" id="early">
+    <div class="wrap">
+      <div class="head"><h2 class="reveal">Where it started.</h2></div>
+      <div class="frame needs-tap reveal d1" id="early-frame">
+        <video id="early-film" src="assets/film-early.mp4" poster="assets/film-early-poster.jpg" playsinline preload="none" aria-label="The first Prism film: the prototype on a wooden table, playing piano, chess, maps and games"></video>
+        <button class="play-big" id="early-play" type="button" aria-label="Play the first film"><span><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span></button>
       </div>
     </div>
   </section>
@@ -627,6 +644,14 @@
     rail.addEventListener('animationend', function(){ rail.classList.remove('nudge'); });
   }
   document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closeFilm(); });
+
+  /* ---- the first film: nothing loads until it is tapped ---- */
+  var early = document.getElementById('early-film'), earlyFrame = document.getElementById('early-frame');
+  document.getElementById('early-play').addEventListener('click', function(){
+    earlyFrame.classList.remove('needs-tap');
+    early.controls = true; early.muted = false;
+    early.play().catch(function(){});
+  });
 
   /* ---- film: load when near, play only while on screen ---- */
   var film = document.getElementById('film'), wantsPlay = !reduced;
