@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Thank you</title>
+<meta name="theme-color" content="#ffffff">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../../assets/favicon.png" type="image/png" sizes="64x64">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,600;1,700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --fg:#1d1d1f;--dim:#6e6e73;--line:rgba(0,0,0,.08);
+    --prism:linear-gradient(90deg,#FF3B30,#FF9500,#FFD60A,#34C759,#0A84FF,#AF52DE);
+    --ease:cubic-bezier(.22,1,.36,1);--gutter:clamp(22px,5vw,72px);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{
+    background:#fff;color:var(--fg);min-height:100svh;display:flex;flex-direction:column;
+    font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;line-height:1.5;overflow-x:hidden;
+  }
+  main{flex:1;display:grid;place-items:center;text-align:center;padding:72px var(--gutter)}
+  .glow{position:relative;width:min(560px,90vw);margin:0 auto}
+  .glow img{width:100%;height:auto;mix-blend-mode:multiply;position:relative}
+  .glow::before{content:"";position:absolute;left:10%;right:10%;bottom:4%;height:24%;background:var(--prism);filter:blur(44px);opacity:.3;border-radius:50%}
+  h1{font-size:clamp(2.2rem,5vw,3.6rem);font-weight:600;letter-spacing:-.04em;line-height:1.05;margin-top:28px;text-wrap:balance}
+  h1 em{font-style:italic;font-weight:700}
+  p{color:var(--dim);margin:14px auto 0;max-width:42ch;text-wrap:pretty}
+  .rule{width:120px;height:2px;background:var(--prism);border-radius:2px;margin:28px auto}
+  a.btn{display:inline-block;padding:14px 26px;border-radius:999px;background:var(--fg);color:#fff;text-decoration:none;font-weight:600;font-size:15px;transition:transform .35s var(--ease)}
+  a.btn:hover{transform:translateY(-2px)}
+  .in{opacity:0;transform:translateY(14px);animation:up .9s var(--ease) forwards}
+  .d1{animation-delay:.1s}.d2{animation-delay:.2s}
+  @keyframes up{to{opacity:1;transform:none}}
+  @media (prefers-reduced-motion:reduce){.in{animation:none;opacity:1;transform:none}}
+  footer{padding:28px var(--gutter);border-top:1px solid var(--line);color:#a1a1a6;font-size:13px}
+</style>
+</head>
+<body>
+<main>
+  <div>
+    <div class="glow in"><img src="../../assets/lineup.webp" alt="" width="2000" height="1116"></div>
+    <h1 class="in d1">A <em>Prism</em> is on its way.</h1>
+    <p class="in d1">Thank you for your order. We'll email you before your lamp ships.</p>
+    <div class="rule in d2"></div>
+    <p class="in d2" style="margin:0 auto 24px">Questions? <a href="mailto:hi@lightcompany.ai" style="color:var(--fg)">hi@lightcompany.ai</a></p>
+    <a class="btn in d2" href="../../">Back to Prism</a>
+  </div>
+</main>
+<footer>&copy; 2026 The Light Company</footer>
+</body>
+</html>
